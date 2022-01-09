@@ -1,7 +1,7 @@
 from image_utils import ImageText
 import os
 
-fonts = list(filter(lambda x: '.ttf' in x, os.listdir()))
+fonts = list(filter(lambda x: '.ttf' in x, os.listdir('gu/')))
 
 spaceNamesFile = open('/home/pika/Desktop/TIFR/YOLO-AppV2.0/TRDG/trdg/gu_dict/distribution_final_363/space_363.names', 'r')
 letters = ' '.join([l.strip() if l != 'Space\n' else ' ' for l in spaceNamesFile.readlines()])

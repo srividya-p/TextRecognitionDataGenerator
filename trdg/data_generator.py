@@ -239,7 +239,7 @@ class FakeTextDataGenerator(object):
                 bboxes = mask_to_bboxes(final_mask, splitted_text)
                 with open(os.path.join(out_dir, box_name), "w") as f:
                     for bbox in bboxes:
-                        f.write("{} {:.1f} {:.1f} {:.1f} {:.1f}\n".format( bbox[0], bbox[1], bbox[2], bbox[3], bbox[4]))
+                        f.write("{} {:.6f} {:.6f} {:.6f} {:.6f}\n".format( bbox[0], bbox[1], bbox[2], bbox[3], bbox[4]))
             if output_bboxes == 2:
                 bboxes = mask_to_bboxes(final_mask, tess=True)
                 with open(os.path.join(out_dir, tess_box_name), "w") as f:
