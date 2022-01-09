@@ -1,6 +1,5 @@
 import argparse
-import errno
-import os
+import os, errno
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
@@ -8,16 +7,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import random as rnd
 import string
 import sys
-from multiprocessing import Pool
 
 from tqdm import tqdm
-
-from trdg.data_generator import FakeTextDataGenerator
-from trdg.string_generator import (create_strings_from_dict,
-                                   create_strings_from_file,
-                                   create_strings_from_wikipedia,
-                                   create_strings_randomly)
+from trdg.string_generator import (
+    create_strings_from_dict,
+    create_strings_from_file,
+    create_strings_from_wikipedia,
+    create_strings_randomly,
+)
 from trdg.utils import load_dict, load_fonts
+from trdg.data_generator import FakeTextDataGenerator
+from multiprocessing import Pool
 
 
 def margins(margin):
@@ -51,7 +51,7 @@ def parse_arguments():
         "--language",
         type=str,
         nargs="?",
-        help="The language to use, should be fr (French), en (English), es (Spanish), de (German), ar (Arabic), cn (Chinese), ja (Japanese) or hi (Hindi)",
+        help="The language to use, should be fr (French), en (English), es (Spanish), de (German), or cn (Chinese).",
         default="en",
     )
     parser.add_argument(
@@ -195,6 +195,13 @@ def parse_arguments():
         default=0,
     )
     parser.add_argument(
+        "-obb",
+        "--output_bboxes",
+        type=int,
+        help="Define if the generator will return bounding boxes for the text, 1: Bounding box file, 2: Tesseract format",
+        default=0
+    )
+    parser.add_argument(
         "-d",
         "--distorsion",
         type=int,
@@ -289,7 +296,7 @@ def parse_arguments():
         type=str,
         nargs="?",
         help="Define an image directory to use when background is set to image",
-        default=os.path.join(os.path.split(os.path.realpath(__file__))[0], "images"),
+        default=os.path.join(os.path.split(os.path.realpath(__file__))[0], "images")
     )
     parser.add_argument(
         "-ca",
@@ -302,35 +309,10 @@ def parse_arguments():
         "-dt", "--dict", type=str, nargs="?", help="Define the dictionary to be used"
     )
     parser.add_argument(
-        "-ws",
-        "--word_split",
+        "-ws", "--word_split",
         action="store_true",
         help="Split on words instead of on characters (preserves ligatures, no character spacing)",
         default=False,
-    )
-    parser.add_argument(
-        "-stw",
-        "--stroke_width",
-        type=int, 
-        nargs="?",
-        help="Define the width of the strokes",
-        default=0,
-    )
-    parser.add_argument(
-        "-stf",
-        "--stroke_fill",
-        type=str, 
-        nargs="?",
-        help="Define the color of the contour of the strokes, if stroke_width is bigger than 0",
-        default="#282828",
-    )
-    parser.add_argument(
-        "-im",
-        "--image_mode",
-        type=str,
-        nargs="?",
-        help="Define the image mode to be used. RGB is default, L means 8-bit grayscale images, 1 means 1-bit binary images stored with one pixel per byte, etc.",
-        default="RGB",
     )
     return parser.parse_args()
 
@@ -405,15 +387,6 @@ def main():
             args.length, args.random, args.count, lang_dict
         )
 
-    if args.language == "ar":
-        from arabic_reshaper import ArabicReshaper
-        from bidi.algorithm import get_display
-
-        arabic_reshaper = ArabicReshaper()
-        strings = [
-            " ".join([get_display(arabic_reshaper.reshape(w)) for w in s.split(" ")[::-1]])
-            for s in strings
-        ]
     if args.case == "upper":
         strings = [x.upper() for x in strings]
     if args.case == "lower":
@@ -452,9 +425,7 @@ def main():
                 [args.output_mask] * string_count,
                 [args.word_split] * string_count,
                 [args.image_dir] * string_count,
-                [args.stroke_width] * string_count,
-                [args.stroke_fill] * string_count,
-                [args.image_mode] * string_count,
+                [args.output_bboxes] * string_count,
             ),
         ),
         total=args.count,
@@ -469,10 +440,7 @@ def main():
         ) as f:
             for i in range(string_count):
                 file_name = str(i) + "." + args.extension
-                label = strings[i]
-                if args.space_width == 0:
-                    label = label.replace(" ", "")
-                f.write("{} {}\n".format(file_name, label))
+                f.write("{} {}\n".format(file_name, strings[i]))
 
 
 if __name__ == "__main__":

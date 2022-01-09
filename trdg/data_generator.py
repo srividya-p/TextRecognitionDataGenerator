@@ -1,9 +1,10 @@
 import os
 import random as rnd
 
-from PIL import Image, ImageFilter, ImageStat
+from PIL import Image, ImageFilter
 
 from trdg import computer_text_generator, background_generator, distorsion_generator
+from trdg.utils import mask_to_bboxes
 
 try:
     from trdg import handwritten_text_generator
@@ -49,9 +50,7 @@ class FakeTextDataGenerator(object):
         output_mask,
         word_split,
         image_dir,
-        stroke_width=0, 
-        stroke_fill="#282828",
-        image_mode="RGB", 
+        output_bboxes,
     ):
         image = None
 
@@ -67,7 +66,7 @@ class FakeTextDataGenerator(object):
                 raise ValueError("Vertical handwritten text is unavailable")
             image, mask = handwritten_text_generator.generate(text, text_color)
         else:
-            image, mask = computer_text_generator.generate(
+            image, mask, splitted_text = computer_text_generator.generate(
                 text,
                 font,
                 text_color,
@@ -77,8 +76,6 @@ class FakeTextDataGenerator(object):
                 character_spacing,
                 fit,
                 word_split,
-                stroke_width, 
-                stroke_fill,
             )
         random_angle = rnd.randint(0 - skewing_angle, skewing_angle)
 
@@ -174,26 +171,6 @@ class FakeTextDataGenerator(object):
             "RGB", (background_width, background_height), (0, 0, 0)
         )
 
-        ##############################################################
-        # Comparing average pixel value of text and background image #
-        ##############################################################
-        try:
-            resized_img_st = ImageStat.Stat(resized_img, resized_mask.split()[2])
-            background_img_st = ImageStat.Stat(background_img) 
-
-            resized_img_px_mean = sum(resized_img_st.mean[:2]) / 3
-            background_img_px_mean = sum(background_img_st.mean) / 3
-
-            if abs(resized_img_px_mean - background_img_px_mean) < 15:
-                print("value of mean pixel is too similar. Ignore this image")
-
-                print("resized_img_st \n {}".format(resized_img_st.mean))
-                print("background_img_st \n {}".format(background_img_st.mean))
-
-                return
-        except Exception as err:
-            return
-
         #############################
         # Place text with alignment #
         #############################
@@ -224,49 +201,51 @@ class FakeTextDataGenerator(object):
                 (background_width - new_text_width - margin_right, margin_top),
             )
 
-        #######################
+        ##################################
         # Apply gaussian blur #
-        #######################
+        ##################################
 
         gaussian_filter = ImageFilter.GaussianBlur(
             radius=blur if not random_blur else rnd.randint(0, blur)
         )
         final_image = background_img.filter(gaussian_filter)
         final_mask = background_mask.filter(gaussian_filter)
-        
-        ############################################
-        # Change image mode (RGB, grayscale, etc.) #
-        ############################################
-        
-        final_image = final_image.convert(image_mode)
-        final_mask = final_mask.convert(image_mode) 
 
         #####################################
         # Generate name for resulting image #
         #####################################
-        # We remove spaces if space_width == 0
-        if space_width == 0:
-            text = text.replace(" ", "")
         if name_format == 0:
-            image_name = "{}_{}.{}".format(text, str(index), extension)
-            mask_name = "{}_{}_mask.png".format(text, str(index))
+            name = "{}_{}".format(text, str(index))
         elif name_format == 1:
-            image_name = "{}_{}.{}".format(str(index), text, extension)
-            mask_name = "{}_{}_mask.png".format(str(index), text)
+            name = "{}_{}".format(str(index), text)
         elif name_format == 2:
-            image_name = "{}.{}".format(str(index), extension)
-            mask_name = "{}_mask.png".format(str(index))
+            name = str(index)
         else:
             print("{} is not a valid name format. Using default.".format(name_format))
-            image_name = "{}_{}.{}".format(text, str(index), extension)
-            mask_name = "{}_{}_mask.png".format(text, str(index))
+            name = "{}_{}".format(text, str(index))
+
+        image_name = "{}.{}".format(name, extension)
+        mask_name = "{}_mask.png".format(name)
+        box_name = "{}.txt".format(name)
+        tess_box_name = "{}.box".format(name)
+
 
         # Save the image
         if out_dir is not None:
-            final_image.save(os.path.join(out_dir, image_name))
+            final_image.convert("RGB").save(os.path.join(out_dir, image_name))
             if output_mask == 1:
-                final_mask.save(os.path.join(out_dir, mask_name))
+                final_mask.convert("RGB").save(os.path.join(out_dir, mask_name))
+            if output_bboxes == 1:
+                bboxes = mask_to_bboxes(final_mask, splitted_text)
+                with open(os.path.join(out_dir, box_name), "w") as f:
+                    for bbox in bboxes:
+                        f.write("{} {:.6f} {:.6f} {:.6f} {:.6f}\n".format( bbox[0], bbox[1], bbox[2], bbox[3], bbox[4]))
+            if output_bboxes == 2:
+                bboxes = mask_to_bboxes(final_mask, tess=True)
+                with open(os.path.join(out_dir, tess_box_name), "w") as f:
+                    for bbox, char in zip(bboxes, text):
+                        f.write(" ".join([char] + [str(v) for v in bbox] + ['0']) + "\n")
         else:
             if output_mask == 1:
-                return final_image, final_mask
-            return final_image
+                return final_image.convert("RGB"), final_mask.convert("RGB")
+            return final_image.convert("RGB")
