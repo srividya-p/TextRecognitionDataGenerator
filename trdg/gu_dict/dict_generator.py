@@ -36,11 +36,13 @@ matplotlib.rcParams['font.family'] = newFontEntry.name
 
 CWD = os.getcwd() 
 
-spaceNamesFile = open(CWD+'/distribution_final/space.names', 'r')
+# spaceNamesFile = open(CWD+'/distribution_final_11/space.names', 'r')
+spaceNamesFile = open(CWD+'/distribution_final_363/space_363.names', 'r')
 spaceNames = [char.strip() for char in spaceNamesFile.readlines()]
 spaceNames[spaceNames.index('Space')] = ' '
 
-complexChars = spaceNames[0 : 5]
+# complexChars = spaceNames[0 : 5]
+complexChars = spaceNames[0 : 222]
 choiceList = []
 
 for char in spaceNames:
@@ -51,8 +53,11 @@ for char in spaceNames:
 
 choiceList.extend([' '] * 1)
 
-dictFile = open(CWD+'/distribution_final/gu.txt', 'w')
-dictSize = 880
+# dictFile = open(CWD+'/distribution_final_11/gu.txt', 'w')
+dictFile = open(CWD+'/distribution_final_363/gu.txt', 'w')
+# dictSize = 880
+dictSize = 31002
+
 sentenceLengths = range(20, 30)
 
 def simple_random():
@@ -65,7 +70,9 @@ def simple_random():
         dictFile.write(" ".join(sentence.split())+'\n')
         
 def calculate_distribution():
-    dictFile = open(CWD+'/distribution_final/gu.txt', 'r')
+    # dictFile = open(CWD+'/distribution_final_11/gu.txt', 'r')        
+    dictFile = open(CWD+'/distribution_final_363/gu.txt', 'r')
+
     guDict = [word.strip() for word in dictFile.readlines()]
 
     maatras = ['ા', 'િ', 'ી', 'ુ', 'ૂ', 'ે', 'ૈ', 'ો', 'ૌ']
@@ -93,21 +100,23 @@ def plot_distribution(count_dict):
     pyplot.figure(figsize=(40, 10))
     pyplot.bar(x_labels, y_points, width=0.3, align='center', color='g')
 
-    i=1.0
-    j=50
-    for i in range(len(x_labels)):
-        pyplot.annotate(y_points[i], (-0.1 + i, y_points[i] + j))
+    # i=1.0
+    # j=50
+    # for i in range(len(x_labels)):
+    #     pyplot.annotate(y_points[i], (-0.1 + i, y_points[i] + j))
 
     pyplot.title("Character Distribution of Gujarati Images Training Data")
     pyplot.xlabel("Characters")
     pyplot.ylabel("Frequency")
 
-    pyplot.savefig('distribution_final/guDict.png', facecolor='white')
+    # pyplot.savefig('distribution_final_11/guDict.png', facecolor='white')
+    pyplot.savefig('distribution_final_363/guDict.png', facecolor='white')
 
 def write_distribution(distrbution):
-    dist_file = open('distribution_final/gu_dist.txt', 'w')
-    for k in ['અ', 'કિ', 'છા', 'જૂ', 'ણો', 'ત', 'રા', 'ડે', 'ન', 'ઘ', ' ']:
-        dist_file.write(k + ' ' + str(distrbution[k]) + '\n' if k != ' ' else 'Space' + ' ' + str(distrbution[k]) + '\n')
+    # dist_file = open('distribution_final_11/gu_dist.csv', 'w')
+    dist_file = open('distribution_final_363/gu_dist.csv', 'w')
+    for k in spaceNames:
+        dist_file.write(k + ',' + str(distrbution[k]) + '\n' if k != ' ' else 'Space' + ',' + str(distrbution[k]) + '\n')
 
 
 if __name__ == '__main__':

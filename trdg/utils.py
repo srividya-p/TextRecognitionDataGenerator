@@ -78,7 +78,7 @@ def mask_to_bboxes(mask, splitted_text, tess=False):
             i += 1
     
     char_index_mapping, i = dict(), 0
-    space_names_file = open('/home/pika/Desktop/TIFR/YOLO-AppV2.0/TRDG/trdg/gu_dict/distribution_final/space.names', 'r')
+    space_names_file = open('/home/pika/Desktop/TIFR/YOLO-AppV2.0/TRDG/trdg/gu_dict/distribution_final_363/space_363.names', 'r')
 
     for line in space_names_file.readlines():
         char = line.replace('\n', '')

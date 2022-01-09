@@ -68,24 +68,72 @@ Divided into 2 sets -
 
 Final Command List
 
-python3 run.py -l gu -c 180 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final/input_files/input0.txt" --output_dir "out/out0" -k 10 -rk -d 3 -b 0
+python3 run.py -l gu -c 180 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_11/input_files/input0.txt" --output_dir "out/out0" -k 10 -rk -d 3 -b 0
 
-python3 run.py -l gu -c 180 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final/input_files/input1.txt" --output_dir "out/out1" -k 10 -rk -d 3 -b 1
+python3 run.py -l gu -c 180 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_11/input_files/input1.txt" --output_dir "out/out1" -k 10 -rk -d 3 -b 1
 
-python3 run.py -l gu -c 180 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final/input_files/input2.txt" --output_dir "out/out2" -k 10 -rk -d 3 -b 2
+python3 run.py -l gu -c 180 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_11/input_files/input2.txt" --output_dir "out/out2" -k 10 -rk -d 3 -b 2
 
-python3 run.py -l gu -c 113 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final/input_files/input3.txt" --output_dir "out/out3" -k 10 -rk -b 0
+python3 run.py -l gu -c 113 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_11/input_files/input3.txt" --output_dir "out/out3" -k 10 -rk -b 0
 
-python3 run.py -l gu -c 113 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final/input_files/input4.txt" --output_dir "out/out4" -k 10 -rk -b 1
+python3 run.py -l gu -c 113 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_11/input_files/input4.txt" --output_dir "out/out4" -k 10 -rk -b 1
 
-python3 run.py -l gu -c 114 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final/input_files/input5.txt" --output_dir "out/out5" -k 10 -rk -b 2
-
-
-
-    
+python3 run.py -l gu -c 114 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_11/input_files/input5.txt" --output_dir "out/out5" -k 10 -rk -b 2
 
 
- 
+363 CLASS
+27x + 17y (distortion : no distortion)
+
+Command - For a total of 31002 images [363 Classes - 140 Simple Classes / 222 Complex Classes, 1500 images per SC / 2500 images per CC]
+Divided into 2 sets - 
+    Set 1 (19002 images) - Distortions present
+    Set 2 (12000 images) - No Distortions
+
+    SET 1 - (19002 IMAGES)
+        For each Background
+        -b 0 1 2 (Guassian Noise, Plain Wite, Quasi-Crystal)
+
+            Run the command
+            python3 run.py -l gu -c 6334 -obb 1 -na 2 -ws -f 128 -w 5 -e png -t 5 -k 10 -rk -d 3 
+
+            Explanation in Variation- 
+            (-l gu) Language - Gujarati 
+            (-c 167) Number of Images - 167 
+            (-obb 1) Output Bounding Boxes - True
+            (-na 2) File name format - 0.png/0.txt
+            (-ws) Word Split - True (Preserve Ligatures)
+            (-f 128) Format - Width = 128 px
+            (-w 5) Number of Words per image - 5
+            (-e png) Extension of image - png
+            (-t 5) Thread count - 5
+            (-k 10 -rk) Skewing - A random angle between 10 and -10
+            (-d 3) Distortion - A random distortion between Verical/Horizontal Stroke and Sin/Cos wave
+            () Font - A random font from the 20 downloaded fonts will be chosen
+
+    SET 2 - (12000 IMAGES)
+        For each Background
+        -b 0 1 2 (Guassian Noise, Plain Wite, Quasi-Crystal)
+
+            Run the command
+            python3 run.py -l gu -c 4000 -obb 1 -na 2 -ws -f 128 -w 5 -e png -t 5 -k 10 -rk 
+
+            (Option for Distortion has been removed)
+
+
+Final Command List
+
+python3 run.py -l gu -c 6334 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_363/input_files/input0.txt" --output_dir "out/out0" -k 10 -rk -d 3 -b 0
+
+python3 run.py -l gu -c 6334 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_363/input_files/input1.txt" --output_dir "out/out1" -k 10 -rk -d 3 -b 1
+
+python3 run.py -l gu -c 6334 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_363/input_files/input2.txt" --output_dir "out/out2" -k 10 -rk -d 3 -b 2
+
+python3 run.py -l gu -c 4000 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_363/input_files/input3.txt" --output_dir "out/out3" -k 10 -rk -b 0
+
+python3 run.py -l gu -c 4000 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_363/input_files/input4.txt" --output_dir "out/out4" -k 10 -rk -b 1
+
+python3 run.py -l gu -c 4000 -obb 1 -na 2 -f 128 -e png -ws -t 5 -i "gu_dict/distribution_final_363/input_files/input5.txt" --output_dir "out/out5" -k 10 -rk -b 2
+
 
 
 
