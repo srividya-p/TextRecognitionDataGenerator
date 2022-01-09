@@ -2,9 +2,9 @@
 
 digits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯']
 
-vowels = ['અ', 'આ', 'ઇ', 'ઈ', 'ઉ', 'ઊ', 'ઋ', 'ૠ', 'એ', 'ઐ', 'ઓ', 'ઔ']
+vowels = ['અ', 'આ', 'ઇ', 'ઈ', 'ઉ', 'ઊ', 'ઋ', 'એ', 'ઐ', 'ઓ', 'ઔ']
 
-# 'ઌ', 'ૡ', 'ૃ', 'ૄ'  'ઁ',  'ં' , 'ઃ', '્'
+# 'ઌ', 'ૡ', 'ૃ', 'ૄ'  'ઁ',  'ં' , 'ઃ', '્' 'ૠ'
 
 consonants = ['ક', 'ખ', 'ગ', 'ઘ', 'ઙ',
               'ચ', 'છ', 'જ', 'ઝ', 'ઞ',
@@ -74,7 +74,7 @@ for line in lines:
         s+=1
 
 flag = False
-for line in lines[0:222]:
+for line in lines[0:c]:
     if line[0] in complex_consonants or line[0] in vowels:
         flag = True
     else:
@@ -84,7 +84,7 @@ print("Complex = " + str(c))
 print("Simple = " + str(s))
 print("Space = " + str(1))
 print()
-print('Complex lies only in 0 : 222 - '+str(flag))
+print('Complex lies only in 0 : '+ str(c) +' - '+str(flag))
 
 
 
